@@ -17,15 +17,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.text.TextWatcher;
 
 
 import com.example.krish.medical_app.Adapters.PatientAdapter;
@@ -42,14 +45,17 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.example.krish.medical_app.R.drawable.s;
+
 /**
  * Created by KRISH on 13-06-2017.
  */
 
 public class My_patients extends AppCompatActivity {
 
-    protected SearchView search;
     protected ImageButton options;
+    protected ImageButton search_imageView;
+    protected EditText search;
     protected ImageButton add_patient;
     protected ListView listView;
     protected String doc_username;
@@ -63,10 +69,13 @@ public class My_patients extends AppCompatActivity {
     protected TextView profile_btn;
     protected TextView doc_name;
     protected TextView delete_acc;
+    protected TextView my_patients;
     protected AVLoadingIndicatorView avi;
 
-
+    ArrayList<String> patient_name;
     ArrayList<Patient> patient_array;
+
+    ArrayList<String> patients;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,21 +93,25 @@ public class My_patients extends AppCompatActivity {
         existing_patients = FirebaseDatabase.getInstance().getReference();
 
         patient_array = new ArrayList<>();
+        patient_name = new ArrayList<String>();
 
+        patients = new ArrayList<String>();
 
-        search = (SearchView)findViewById(R.id.search_bar_my_patients_search);
+        search_imageView = (ImageButton) findViewById(R.id.imageView_search);
+        search = (EditText) findViewById(R.id.filter_search);
         options = (ImageButton) findViewById(R.id.imageButton_my_patients_options);
         add_patient = (ImageButton) findViewById(R.id.imageButton_my_patients_add_patient);
         listView = (ListView) findViewById(R.id.listView_my_patients);
         logout_btn = (TextView) findViewById(R.id.logout_btn);
         profile_btn = (TextView) findViewById(R.id.pro_btn);
         doc_name = (TextView) findViewById(R.id.textView_navigation_fullname);
+        my_patients = (TextView) findViewById(R.id.textView_my_patients_patients);
         delete_acc = (TextView) findViewById(R.id.delete_account_btn);
         avi =  (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         avi.show();
 
-        search.setVisibility(View.INVISIBLE);
+        search.setVisibility(View.GONE);
 
         //Adding listener to searchView\
        /* new search.setOnQueryTextListener(new SearchView.OnQueryTextListener()
@@ -193,6 +206,43 @@ public class My_patients extends AppCompatActivity {
                 }
             }
         });
+
+        search_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                my_patients.setVisibility(View.GONE);
+                search.setVisibility(View.VISIBLE);
+            }
+        });
+
+        search.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do some thing now
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Change the TextView background color
+                Log.i("-----------=====-----" , search.getText().toString());
+
+
+               Log.i("kpsdjhkajsdhf------   " , search.getText().toString());
+                search(search.getText().toString());
+                // Get the EditText text and display it on TextView
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Log.i("hereeeeeeee","bla");
+
+                search.setVisibility(View.GONE);
+                my_patients.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -215,23 +265,6 @@ public class My_patients extends AppCompatActivity {
             }
         });
 
-        /*search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.i("Text submit",query);
-
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.i("Text searched",newText);
-
-                return false;
-
-            }
-        });*/
 
         existing_patients.addValueEventListener(new ValueEventListener() {
             @Override
@@ -252,6 +285,7 @@ public class My_patients extends AppCompatActivity {
                         String id = postSnapshot.getKey().toString();
                         patient = new Patient(id, name, null, lname, department, gender, null, age, null, null, null, null, null, null);
                         patient_array.add(patient);
+                        patient_name.add(name);
                         patientadapter.notifyDataSetChanged();
                     }
                     avi.hide();
@@ -264,6 +298,22 @@ public class My_patients extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void search(String s)
+    {
+        System.out.println("0---in search");
+
+        for(int i = 0;i<patient_name.size();i++)
+        {
+            System.out.println(">>>>   " + patient_name.get(i));
+
+            if(patient_name.get(i).contains(s))
+            {
+                patients.add(patient_name.get(i));
+            }
+        }
+
     }
 
     public void launch_new_patient_info(String doc_username, String patient_id) {

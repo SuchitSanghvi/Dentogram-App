@@ -68,7 +68,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected String doc_username,pat_id;
     protected Patient patient_obj;
     protected DatabaseReference edit_patient;
-    String s_department;
+    String s_department, spinner_selection;
     ArrayAdapter<CharSequence> adapter;
 
     @Override
@@ -105,7 +105,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         department_spinner = (Spinner) findViewById(R.id.spinner_new_department);
         other_department = (LinearLayout) findViewById(R.id.linearLayout_new_other);
 
-        other_department.setVisibility(View.INVISIBLE);
+        other_department.setVisibility(View.GONE);
 
         patient_id.setText(pat_id);
 
@@ -208,7 +208,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     s_gender = "NA";
                 }
 
-                if(s_department.equals("Other"))
+                if(spinner_selection.equals("Other"))
                 {
                     if(o_department.getText().toString().equals(""))
                     {
@@ -271,9 +271,9 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
 
-        s_department = department_spinner.getItemAtPosition(position).toString();
+        spinner_selection = department_spinner.getItemAtPosition(position).toString();
 
-        if(s_department.equals("Other"))
+        if(spinner_selection.equals("Other"))
         {
             other_department.setVisibility(View.VISIBLE);
             s_department = o_department.getText().toString();
@@ -283,6 +283,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         else
         {
             other_department.setVisibility(View.INVISIBLE);
+            s_department = spinner_selection;
         }
 
     }
@@ -307,6 +308,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                         if (department_spinner.getItemAtPosition(i).equals(d1.child("patient_department").getValue().toString()))
                         {
                             pos = i;
+                            break;
                         }
                         else
                         {
@@ -320,6 +322,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                         Log.i(d1.child("patient_department").getValue().toString(),"department");
                         o_department.setText(d1.child("patient_department").getValue().toString());
                     }
+
                     department_spinner.setSelection(pos);
                     firstname.setText(d1.child("patient_first_name").getValue().toString());
                     middlename.setText(d1.child("patient_middle_name").getValue().toString());

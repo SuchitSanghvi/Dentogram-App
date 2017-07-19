@@ -532,8 +532,58 @@
                         android:layout_width="70dp"
                         android:layout_height="45dp"
                         android:layout_marginStart="20dp"
-                        android:layout_weight="1.3"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.9"
                         android:hint="Type a Diagnosis"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="18dp" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton_new_delete_diagnosis"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/delete_diagnosis"
+                        android:clickable="false"
+                        android:padding="5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_new_multiple_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_new_add_diagnosis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <ImageButton
+                        android:id="@+id/imageButton_new_add_diagnosis"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/add_diadnosis"
+                        android:clickable="false"
+                        android:padding="5dp" />
+
+                    <TextView
+                        android:id="@+id/editText_new_add_diagnosis"
+                        android:layout_width="70dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1.9"
+                        android:hint="Add Diagnosis"
+                        android:gravity="center_vertical"
                         android:padding="5dp"
                         android:singleLine="true"
                         android:textSize="18dp" />
