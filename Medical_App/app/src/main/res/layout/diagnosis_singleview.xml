@@ -32,7 +32,7 @@
             android:textSize="18dp" />
 
         <ImageButton
-            android:id="@+id/imageButton_new_delete_diagnosis"
+            android:id="@+id/imageButton_diagnosis_singleview_delete"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"

@@ -283,7 +283,7 @@ public class My_patients extends AppCompatActivity {
                         String age = getAge(dob);
                         String gender = postSnapshot.child("patient_gender").getValue().toString();
                         String id = postSnapshot.getKey().toString();
-                        patient = new Patient(id, name, null, lname, department, gender, null, age, null, null, null, null, null, null);
+                        patient = new Patient(id, name, null, lname, department, gender, null, age, null, null, null, null, null, null, null);
                         patient_array.add(patient);
                         patient_name.add(name);
                         patientadapter.notifyDataSetChanged();

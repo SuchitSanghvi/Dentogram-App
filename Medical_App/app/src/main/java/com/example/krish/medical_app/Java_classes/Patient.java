@@ -3,6 +3,7 @@ package com.example.krish.medical_app.Java_classes;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +26,12 @@ public class Patient
     private String mobile;
     private String phone;
     private String diagnosis;
+    private ArrayList<String> diagnosis_list;
     private String medical_history;
     protected DatabaseReference patient = FirebaseDatabase.getInstance().getReference();
 
     public Patient(String patient_id, String first_name, String middle_name, String last_name,String department, String gender, String dob,
-            String age, String email, String address, String mobile, String phone, String diagnosis, String medical_history) {
+            String age, String email, String address, String mobile, String phone, String diagnosis,ArrayList<String> diagnosis_list, String medical_history) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -44,6 +46,7 @@ public class Patient
         this.diagnosis = diagnosis;
         this.medical_history = medical_history;
         this.department = department;
+        this.diagnosis_list = diagnosis_list;
     }
 
     public String getDepartment() {

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,14 +14,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -36,8 +42,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
+import static com.example.krish.medical_app.R.id.center_horizontal;
 import static com.example.krish.medical_app.R.id.parent;
 
 
@@ -59,10 +68,13 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected EditText mobile_num;
     protected EditText phone_num;
     protected EditText diagnosis;
+    protected ImageButton delete_diagnosis;
+    protected ImageButton add_diagnosis;
     protected EditText medical_history;
     protected EditText o_department;
     protected Spinner department_spinner;
     protected LinearLayout other_department;
+    protected LinearLayout layout_diagnosis;
     protected TextView create;
     protected TextView cancel;
     protected String doc_username,pat_id;
@@ -70,6 +82,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected DatabaseReference edit_patient;
     String s_department, spinner_selection;
     ArrayAdapter<CharSequence> adapter;
+    ArrayList<String> diagnosis_array;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -83,6 +96,8 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         doc_username = bundle.getString("username");
         pat_id = bundle.getString("patient_id");
 
+        diagnosis_array = new ArrayList<>();
+
         firstname = (EditText)findViewById(R.id.editText_new_first);
         middlename = (EditText)findViewById(R.id.editText_new_middle);
         lastname = (EditText)findViewById(R.id.editText_new_last);
@@ -95,6 +110,8 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         mobile_num = (EditText)findViewById(R.id.editText_new_mobile);
         phone_num = (EditText)findViewById(R.id.editText_new_phone);
         diagnosis = (EditText)findViewById(R.id.editText_new_diagnosis_type_1);
+        delete_diagnosis = (ImageButton) findViewById(R.id.imageButton_new_delete_diagnosis);
+        add_diagnosis = (ImageButton) findViewById(R.id.imageButton_new_add_diagnosis);
         o_department = (EditText)findViewById(R.id.editText_new_other);
         medical_history = (EditText)findViewById(R.id.editText_new_add_medical_history);
         male = (RadioButton)findViewById(R.id.radio_new_male);
@@ -104,6 +121,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         cancel = (TextView)findViewById(R.id.textView_new_cancel_btn);
         department_spinner = (Spinner) findViewById(R.id.spinner_new_department);
         other_department = (LinearLayout) findViewById(R.id.linearLayout_new_other);
+        layout_diagnosis = (LinearLayout) findViewById(R.id.linearLayout_new_multiple_diagnosis_view);
 
         other_department.setVisibility(View.GONE);
 
@@ -190,6 +208,15 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 s_diagnosis = diagnosis.getText().toString();
                 s_address = address.getText().toString();
 
+                int count_diagnosis = layout_diagnosis.getChildCount();
+                LinearLayout l = null;
+                EditText e = null;
+                for(int i =0; i<count_diagnosis; i++)
+                {
+                    l = (LinearLayout) layout_diagnosis.getChildAt(i);
+                    e = (EditText) l.getChildAt(1);
+                    diagnosis_array.add(e.getText().toString());
+                }
 
                 if(male.isChecked())
                 {
@@ -250,7 +277,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 else
                 {
                     patient_obj = new Patient(pat_id,s_fname,middlename.getText().toString(),lastname.getText().toString(),s_department,s_gender,s_dob,age.getText().toString(),
-                            email.getText().toString(),s_address,s_mobile,phone_num.getText().toString(),s_diagnosis,medical_history.getText().toString());
+                            email.getText().toString(),s_address,s_mobile,phone_num.getText().toString(),s_diagnosis,diagnosis_array,medical_history.getText().toString());
                     patient_obj.firebase_connect(doc_username);
                     launch_My_patients(doc_username);
                 }
@@ -258,6 +285,69 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
             }
         });
+
+        add_diagnosis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+/*
+                View newLayout_diagnosis = LayoutInflater.from(getBaseContext()).inflate(R.layout.diagnosis_singleview, layout_diagnosis, false);
+                EditText diagnosis_value = (EditText) newLayout_diagnosis.findViewById(R.id.editText_diagnosis_singleview);
+
+                ImageButton diagnosis_delete = (ImageButton) newLayout_diagnosis.findViewById(R.id.imageButton_diagnosis_singleview_delete);
+*/
+                int id =Integer.parseInt(UUID.randomUUID()+"");
+                final EditText diagnosis_value = new EditText(New_patient_info.this);
+                diagnosis_value.setHint("Type diagnosis");
+                diagnosis_value.setId(id);
+                diagnosis_value.setTextSize((int)convertDpToPixel(18,New_patient_info.this));
+                diagnosis_value.setSingleLine(true);
+                diagnosis_value.setWidth((int)convertDpToPixel(250,New_patient_info.this));
+                diagnosis_value.setHeight((int)convertDpToPixel(250,New_patient_info.this));
+
+                final ImageView tp = new ImageView(New_patient_info.this);
+                tp.setBackgroundResource(R.drawable.type_diagnosis);
+                tp.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
+                tp.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
+                tp.setClickable(false);
+                LinearLayout.LayoutParams img = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
+                img.width = (int)convertDpToPixel(30,New_patient_info.this);
+                img.height = (int)convertDpToPixel(30,New_patient_info.this);
+                img.gravity = Gravity.CENTER;
+                img.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
+                tp.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
+                tp.setLayoutParams(img);
+
+                int id_del =Integer.parseInt(UUID.randomUUID()+"");
+                final ImageView del = new ImageView(New_patient_info.this);
+                del.setBackgroundResource(R.drawable.delete_diagnosis);
+                del.setId(id_del);
+                del.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
+                del.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
+                del.setClickable(false);
+                LinearLayout.LayoutParams img_del = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
+                img_del.width = (int)convertDpToPixel(30,New_patient_info.this);
+                img_del.height = (int)convertDpToPixel(30,New_patient_info.this);
+                img_del.gravity = Gravity.CENTER;
+                img_del.setMarginEnd((int)convertDpToPixel(10,New_patient_info.this));
+                del.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
+                del.setLayoutParams(img_del);
+
+                final LinearLayout lay = new LinearLayout(New_patient_info.this);
+                LinearLayout.LayoutParams lay_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lay.setLayoutParams(lay_params);
+
+                lay.addView(tp);
+                lay.addView(diagnosis_value);
+                lay.addView(del);
+
+
+            }
+        });
+
+
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,8 +380,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
     public void onNothingSelected(AdapterView<?> arg0)
     {
-
-        department_spinner.setSelection(adapter.getPosition("Other"));
+        
     }
 
     @Override
@@ -431,6 +520,13 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected void onResume() {
         super.onResume();
         registerReceiver(networkStateReceiver  , new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
     }
 
     Snackbar sb = null;

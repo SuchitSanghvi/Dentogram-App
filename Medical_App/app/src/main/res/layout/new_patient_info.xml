@@ -552,7 +552,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout_new_multiple_view"
+                    android:id="@+id/linearLayout_new_multiple_diagnosis_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -560,7 +560,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout_new_add_diagnosis"
+                    android:id="@+id/linearLayout_new_layout_diagnosis"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="2">
