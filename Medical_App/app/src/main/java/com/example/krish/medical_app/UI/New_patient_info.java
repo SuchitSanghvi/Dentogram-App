@@ -80,6 +80,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected String doc_username,pat_id;
     protected Patient patient_obj;
     protected DatabaseReference edit_patient;
+    protected int id =0,id_del =0;
     String s_department, spinner_selection;
     ArrayAdapter<CharSequence> adapter;
     ArrayList<String> diagnosis_array;
@@ -208,7 +209,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 s_diagnosis = diagnosis.getText().toString();
                 s_address = address.getText().toString();
 
-                int count_diagnosis = layout_diagnosis.getChildCount();
+                /*int count_diagnosis = layout_diagnosis.getChildCount();
                 LinearLayout l = null;
                 EditText e = null;
                 for(int i =0; i<count_diagnosis; i++)
@@ -216,7 +217,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     l = (LinearLayout) layout_diagnosis.getChildAt(i);
                     e = (EditText) l.getChildAt(1);
                     diagnosis_array.add(e.getText().toString());
-                }
+                }*/
 
                 if(male.isChecked())
                 {
@@ -298,7 +299,8 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
                 ImageButton diagnosis_delete = (ImageButton) newLayout_diagnosis.findViewById(R.id.imageButton_diagnosis_singleview_delete);
 */
-                int id =Integer.parseInt(UUID.randomUUID()+"");
+               // int id =Integer.parseInt(UUID.randomUUID()+"");
+
                 final EditText diagnosis_value = new EditText(New_patient_info.this);
                 diagnosis_value.setHint("Type diagnosis");
                 diagnosis_value.setId(id);
@@ -320,7 +322,8 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 tp.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
                 tp.setLayoutParams(img);
 
-                int id_del =Integer.parseInt(UUID.randomUUID()+"");
+                //int id_del =Integer.parseInt(UUID.randomUUID()+"");
+
                 final ImageView del = new ImageView(New_patient_info.this);
                 del.setBackgroundResource(R.drawable.delete_diagnosis);
                 del.setId(id_del);
@@ -342,6 +345,10 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 lay.addView(tp);
                 lay.addView(diagnosis_value);
                 lay.addView(del);
+
+                layout_diagnosis.addView(lay);
+                id++;
+                id_del++;
 
 
             }
