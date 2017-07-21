@@ -529,13 +529,12 @@
 
                     <EditText
                         android:id="@+id/editText_new_diagnosis_type_1"
-                        android:layout_width="70dp"
+                        android:layout_width="250dp"
                         android:layout_height="45dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_weight="1.9"
-                        android:hint="Type a Diagnosis"
-                        android:padding="5dp"
+                        android:hint="Type Diagnosis"
                         android:singleLine="true"
                         android:textSize="18dp" />
 

@@ -74,6 +74,7 @@ public class My_patients extends AppCompatActivity {
 
     ArrayList<String> patient_name;
     ArrayList<Patient> patient_array;
+    //ArrayList<String> patient_diagnosis;
 
     ArrayList<String> patients;
 
@@ -93,6 +94,7 @@ public class My_patients extends AppCompatActivity {
         existing_patients = FirebaseDatabase.getInstance().getReference();
 
         patient_array = new ArrayList<>();
+        //patient_diagnosis = new ArrayList<>();
         patient_name = new ArrayList<String>();
 
         patients = new ArrayList<String>();
@@ -283,7 +285,7 @@ public class My_patients extends AppCompatActivity {
                         String age = getAge(dob);
                         String gender = postSnapshot.child("patient_gender").getValue().toString();
                         String id = postSnapshot.getKey().toString();
-                        patient = new Patient(id, name, null, lname, department, gender, null, age, null, null, null, null, null, null, null);
+                        patient = new Patient(id, name, null, lname, department, gender, null, age, null, null, null, null, null, null);
                         patient_array.add(patient);
                         patient_name.add(name);
                         patientadapter.notifyDataSetChanged();

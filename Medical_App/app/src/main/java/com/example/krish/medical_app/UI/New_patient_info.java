@@ -80,10 +80,13 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected String doc_username,pat_id;
     protected Patient patient_obj;
     protected DatabaseReference edit_patient;
-    protected int id =0,id_del =0;
+    protected int id =0;
     String s_department, spinner_selection;
     ArrayAdapter<CharSequence> adapter;
+
+
     ArrayList<String> diagnosis_array;
+    ArrayList<EditText> diagnosis_editext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -98,6 +101,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         pat_id = bundle.getString("patient_id");
 
         diagnosis_array = new ArrayList<>();
+        diagnosis_editext = new ArrayList<>();
 
         firstname = (EditText)findViewById(R.id.editText_new_first);
         middlename = (EditText)findViewById(R.id.editText_new_middle);
@@ -249,6 +253,14 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     }
                 }
 
+                diagnosis_array.add(s_diagnosis);
+                for (int i = 0; i< diagnosis_editext.size();i++)
+                {
+                    diagnosis_array.add(diagnosis_editext.get(i).getText().toString());
+                }
+
+
+
                 if(s_fname.length()==0)
                 {
                     firstname.setHintTextColor(Color.RED);
@@ -278,7 +290,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 else
                 {
                     patient_obj = new Patient(pat_id,s_fname,middlename.getText().toString(),lastname.getText().toString(),s_department,s_gender,s_dob,age.getText().toString(),
-                            email.getText().toString(),s_address,s_mobile,phone_num.getText().toString(),s_diagnosis,diagnosis_array,medical_history.getText().toString());
+                            email.getText().toString(),s_address,s_mobile,phone_num.getText().toString(),diagnosis_array,medical_history.getText().toString());
                     patient_obj.firebase_connect(doc_username);
                     launch_My_patients(doc_username);
                 }
@@ -304,10 +316,14 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 final EditText diagnosis_value = new EditText(New_patient_info.this);
                 diagnosis_value.setHint("Type diagnosis");
                 diagnosis_value.setId(id);
-                diagnosis_value.setTextSize((int)convertDpToPixel(18,New_patient_info.this));
+                LinearLayout.LayoutParams edit = new LinearLayout.LayoutParams((int)convertDpToPixel(230,New_patient_info.this), LinearLayout.LayoutParams.MATCH_PARENT);
+                edit.width = (int)convertDpToPixel(230,New_patient_info.this);
+                edit.height = (int)convertDpToPixel(45,New_patient_info.this);
+                edit.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
+                edit.setMarginEnd((int)convertDpToPixel(20,New_patient_info.this));
                 diagnosis_value.setSingleLine(true);
-                diagnosis_value.setWidth((int)convertDpToPixel(250,New_patient_info.this));
-                diagnosis_value.setHeight((int)convertDpToPixel(250,New_patient_info.this));
+                diagnosis_value.setLayoutParams(edit);
+                diagnosis_editext.add(diagnosis_value);
 
                 final ImageView tp = new ImageView(New_patient_info.this);
                 tp.setBackgroundResource(R.drawable.type_diagnosis);
@@ -326,7 +342,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
                 final ImageView del = new ImageView(New_patient_info.this);
                 del.setBackgroundResource(R.drawable.delete_diagnosis);
-                del.setId(id_del);
+                del.setId(id);
                 del.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
                 del.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
                 del.setClickable(false);
@@ -348,7 +364,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
                 layout_diagnosis.addView(lay);
                 id++;
-                id_del++;
+
 
 
             }
@@ -430,7 +446,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     address.setText(d1.child("patient_address").getValue().toString());
                     mobile_num.setText(d1.child("patient_mobile").getValue().toString());
                     phone_num.setText(d1.child("patient_phone").getValue().toString());
-                    diagnosis.setText(d1.child("patient_diagnosis").getValue().toString());
+                    //diagnosis.setText(d1.child("patient_diagnosis").getValue().toString());
                     medical_history.setText(d1.child("patient_medical_history").getValue().toString());
                     String gender_s = d1.child("patient_gender").getValue().toString();
                     if (gender_s.equals("Male")) {

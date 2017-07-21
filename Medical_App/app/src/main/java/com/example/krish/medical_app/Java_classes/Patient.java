@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by parini on 16-06-2017.
@@ -25,13 +26,12 @@ public class Patient
     private String address;
     private String mobile;
     private String phone;
-    private String diagnosis;
     private ArrayList<String> diagnosis_list;
     private String medical_history;
     protected DatabaseReference patient = FirebaseDatabase.getInstance().getReference();
 
     public Patient(String patient_id, String first_name, String middle_name, String last_name,String department, String gender, String dob,
-            String age, String email, String address, String mobile, String phone, String diagnosis,ArrayList<String> diagnosis_list, String medical_history) {
+            String age, String email, String address, String mobile, String phone, ArrayList<String> diagnosis_list, String medical_history) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -43,7 +43,6 @@ public class Patient
         this.address = address;
         this.mobile = mobile;
         this.phone = phone;
-        this.diagnosis = diagnosis;
         this.medical_history = medical_history;
         this.department = department;
         this.diagnosis_list = diagnosis_list;
@@ -145,14 +144,6 @@ public class Patient
         this.phone = phone;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
     public String getMedical_history() {
         return medical_history;
     }
@@ -175,10 +166,17 @@ public class Patient
         map_patient.put("patient_address",address);
         map_patient.put("patient_mobile",mobile);
         map_patient.put("patient_phone",phone);
-        map_patient.put("patient_diagnosis",diagnosis);
         map_patient.put("patient_medical_history",medical_history);
 
+        Map<String,Object>map_diagnosis = new HashMap<String, Object>();
+        for(int i = 0; i<diagnosis_list.size();i++)
+        {
+            String id = patient.child(doc_username).child("patients").child(patient_id).child("patien_diagnosis").push().getKey();
+            map_diagnosis.put(id,diagnosis_list.get(i));
+        }
+
         patient.child(doc_username).child("patients").child(patient_id).updateChildren(map_patient);
+        patient.child(doc_username).child("patients").child(patient_id).child("patien_diagnosis").updateChildren(map_diagnosis);
     }
 }
 
