@@ -394,14 +394,21 @@ public class View_patient extends AppCompatActivity {
                     v_name = d1.child("patient_first_name").getValue().toString() + " " + d1.child("patient_last_name").getValue().toString();
                     v_gender = d1.child("patient_gender").getValue().toString();
                     v_dob = d1.child("patient_dob").getValue().toString();
-                    v_diagnosis = d1.child("patient_diagnosis").getValue().toString();
+                    //v_diagnosis = d1.child("patient_diagnosis").getValue().toString();
                     v_mobile = d1.child("patient_mobile").getValue().toString();
                     v_phone = d1.child("patient_phone").getValue().toString();
                     v_medhis = d1.child("patient_medical_history").getValue().toString();
                     v_reffered = dataSnapshot.child(doc_username).child("name").getValue().toString();
                     v_department = d1.child("patient_department").getValue().toString();
+                    v_diagnosis = "";
 
+                    for (DataSnapshot postSnapshot : dataSnapshot.child(doc_username).child("patients").child(pat_id).child("patient_diagnosis").getChildren())
+                    {
 
+                        v_diagnosis += postSnapshot.getValue().toString();
+                        v_diagnosis += "\n";
+
+                    }
 
                     patient.setText(v_name.toUpperCase());
                     patient_name.setText(v_name);

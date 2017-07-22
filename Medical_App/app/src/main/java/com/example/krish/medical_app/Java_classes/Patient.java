@@ -176,7 +176,7 @@ public class Patient
         }
 
         patient.child(doc_username).child("patients").child(patient_id).updateChildren(map_patient);
-        patient.child(doc_username).child("patients").child(patient_id).child("patien_diagnosis").updateChildren(map_diagnosis);
+        patient.child(doc_username).child("patients").child(patient_id).child("patient_diagnosis").setValue(map_diagnosis);
     }
 }
 

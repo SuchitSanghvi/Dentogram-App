@@ -48,7 +48,7 @@ import java.util.UUID;
 
 import static com.example.krish.medical_app.R.id.center_horizontal;
 import static com.example.krish.medical_app.R.id.parent;
-
+import static com.example.krish.medical_app.R.id.textView_view_diagnosis_value;
 
 
 public class New_patient_info extends AppCompatActivity implements AdapterView.OnItemSelectedListener
@@ -81,11 +81,14 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     protected Patient patient_obj;
     protected DatabaseReference edit_patient;
     protected int id =0;
+    protected int count;
     String s_department, spinner_selection;
     ArrayAdapter<CharSequence> adapter;
 
 
     ArrayList<String> diagnosis_array;
+    ArrayList<String> diagnosis_key;
+    ArrayList<Integer> diagnosis_id;
     ArrayList<EditText> diagnosis_editext;
 
     @Override
@@ -102,6 +105,10 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
         diagnosis_array = new ArrayList<>();
         diagnosis_editext = new ArrayList<>();
+        diagnosis_key = new ArrayList<>();
+        diagnosis_id = new ArrayList<>();
+
+        count=0;
 
         firstname = (EditText)findViewById(R.id.editText_new_first);
         middlename = (EditText)findViewById(R.id.editText_new_middle);
@@ -114,8 +121,8 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         address = (EditText)findViewById(R.id.editText_new_address);
         mobile_num = (EditText)findViewById(R.id.editText_new_mobile);
         phone_num = (EditText)findViewById(R.id.editText_new_phone);
-        diagnosis = (EditText)findViewById(R.id.editText_new_diagnosis_type_1);
-        delete_diagnosis = (ImageButton) findViewById(R.id.imageButton_new_delete_diagnosis);
+       // diagnosis = (EditText)findViewById(R.id.editText_new_diagnosis_type_1);
+        //delete_diagnosis = (ImageButton) findViewById(R.id.imageButton_new_delete_diagnosis);
         add_diagnosis = (ImageButton) findViewById(R.id.imageButton_new_add_diagnosis);
         o_department = (EditText)findViewById(R.id.editText_new_other);
         medical_history = (EditText)findViewById(R.id.editText_new_add_medical_history);
@@ -127,6 +134,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
         department_spinner = (Spinner) findViewById(R.id.spinner_new_department);
         other_department = (LinearLayout) findViewById(R.id.linearLayout_new_other);
         layout_diagnosis = (LinearLayout) findViewById(R.id.linearLayout_new_multiple_diagnosis_view);
+        //add_diagnosis("");
 
         other_department.setVisibility(View.GONE);
 
@@ -210,7 +218,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                 s_fname = firstname.getText().toString();
                 s_dob = dob.getText().toString();
                 s_mobile = mobile_num.getText().toString();
-                s_diagnosis = diagnosis.getText().toString();
+                //s_diagnosis = diagnosis.getText().toString();
                 s_address = address.getText().toString();
 
                 /*int count_diagnosis = layout_diagnosis.getChildCount();
@@ -253,7 +261,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     }
                 }
 
-                diagnosis_array.add(s_diagnosis);
+                //diagnosis_array.add(s_diagnosis);
                 for (int i = 0; i< diagnosis_editext.size();i++)
                 {
                     diagnosis_array.add(diagnosis_editext.get(i).getText().toString());
@@ -281,11 +289,11 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
                     mobile_num.setHintTextColor(Color.RED);
                     mobile_num.setHint("Required Mobile No.");
                 }
-                else if(s_diagnosis.length()==0)
+                /*else if(s_diagnosis.length()==0)
                 {
                     diagnosis.setHintTextColor(Color.RED);
                     diagnosis.setHint("Required Diagnosis");
-                }
+                }*/
 
                 else
                 {
@@ -313,58 +321,7 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 */
                // int id =Integer.parseInt(UUID.randomUUID()+"");
 
-                final EditText diagnosis_value = new EditText(New_patient_info.this);
-                diagnosis_value.setHint("Type diagnosis");
-                diagnosis_value.setId(id);
-                LinearLayout.LayoutParams edit = new LinearLayout.LayoutParams((int)convertDpToPixel(230,New_patient_info.this), LinearLayout.LayoutParams.MATCH_PARENT);
-                edit.width = (int)convertDpToPixel(230,New_patient_info.this);
-                edit.height = (int)convertDpToPixel(45,New_patient_info.this);
-                edit.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
-                edit.setMarginEnd((int)convertDpToPixel(20,New_patient_info.this));
-                diagnosis_value.setSingleLine(true);
-                diagnosis_value.setLayoutParams(edit);
-                diagnosis_editext.add(diagnosis_value);
-
-                final ImageView tp = new ImageView(New_patient_info.this);
-                tp.setBackgroundResource(R.drawable.type_diagnosis);
-                tp.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
-                tp.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
-                tp.setClickable(false);
-                LinearLayout.LayoutParams img = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
-                img.width = (int)convertDpToPixel(30,New_patient_info.this);
-                img.height = (int)convertDpToPixel(30,New_patient_info.this);
-                img.gravity = Gravity.CENTER;
-                img.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
-                tp.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
-                tp.setLayoutParams(img);
-
-                //int id_del =Integer.parseInt(UUID.randomUUID()+"");
-
-                final ImageView del = new ImageView(New_patient_info.this);
-                del.setBackgroundResource(R.drawable.delete_diagnosis);
-                del.setId(id);
-                del.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
-                del.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
-                del.setClickable(false);
-                LinearLayout.LayoutParams img_del = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
-                img_del.width = (int)convertDpToPixel(30,New_patient_info.this);
-                img_del.height = (int)convertDpToPixel(30,New_patient_info.this);
-                img_del.gravity = Gravity.CENTER;
-                img_del.setMarginEnd((int)convertDpToPixel(10,New_patient_info.this));
-                del.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
-                del.setLayoutParams(img_del);
-
-                final LinearLayout lay = new LinearLayout(New_patient_info.this);
-                LinearLayout.LayoutParams lay_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lay.setLayoutParams(lay_params);
-
-                lay.addView(tp);
-                lay.addView(diagnosis_value);
-                lay.addView(del);
-
-                layout_diagnosis.addView(lay);
-                id++;
-
+                add_diagnosis("");
 
 
             }
@@ -409,11 +366,29 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onStart() {
         super.onStart();
+        diagnosis_array.clear();
+        diagnosis_key.clear();
+        diagnosis_id.clear();
+        diagnosis_editext.clear();
+
         edit_patient.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot d1 = dataSnapshot.child(doc_username).child("patients").child(pat_id);
                 if(d1.exists()) {
+                    if(count==0)
+                    {
+                        for (DataSnapshot postSnapshot : dataSnapshot.child(doc_username).child("patients").child(pat_id).child("patient_diagnosis").getChildren())
+                        {
+                            String text = postSnapshot.getValue().toString();
+                            String key = postSnapshot.getKey();
+                            diagnosis_key.add(key);
+                            add_diagnosis(text);
+                        }
+                        count = 1;
+                    }
+
+
                     int pos = 0;
                     for (int i = 0; i < 8; i++)
                     {
@@ -586,5 +561,78 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onBackPressed() {
+    }
+
+    public void add_diagnosis(String text)
+    {
+        final EditText diagnosis_value = new EditText(New_patient_info.this);
+        diagnosis_value.setHint("Type diagnosis");
+        diagnosis_value.setId(id);
+        LinearLayout.LayoutParams edit = new LinearLayout.LayoutParams((int)convertDpToPixel(230,New_patient_info.this), LinearLayout.LayoutParams.MATCH_PARENT);
+        edit.width = (int)convertDpToPixel(230,New_patient_info.this);
+        edit.height = (int)convertDpToPixel(45,New_patient_info.this);
+        edit.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
+        edit.setMarginEnd((int)convertDpToPixel(20,New_patient_info.this));
+        diagnosis_value.setSingleLine(true);
+        diagnosis_value.setLayoutParams(edit);
+        diagnosis_value.setText(text);
+        diagnosis_editext.add(diagnosis_value);
+
+        final ImageView tp = new ImageView(New_patient_info.this);
+        tp.setBackgroundResource(R.drawable.type_diagnosis);
+        tp.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
+        tp.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
+        tp.setClickable(false);
+        LinearLayout.LayoutParams img = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
+        img.width = (int)convertDpToPixel(30,New_patient_info.this);
+        img.height = (int)convertDpToPixel(30,New_patient_info.this);
+        img.gravity = Gravity.CENTER;
+        img.setMarginStart((int)convertDpToPixel(20,New_patient_info.this));
+        tp.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
+        tp.setLayoutParams(img);
+
+        //int id_del =Integer.parseInt(UUID.randomUUID()+"");
+
+        final ImageView del = new ImageView(New_patient_info.this);
+        del.setBackgroundResource(R.drawable.delete_diagnosis);
+        del.setId(id);
+        del.setMinimumWidth((int)convertDpToPixel(30,New_patient_info.this));
+        del.setMinimumHeight((int)convertDpToPixel(30,New_patient_info.this));
+        del.setClickable(false);
+        LinearLayout.LayoutParams img_del = new LinearLayout.LayoutParams((int)convertDpToPixel(30,New_patient_info.this), (int)convertDpToPixel(30,New_patient_info.this));
+        img_del.width = (int)convertDpToPixel(30,New_patient_info.this);
+        img_del.height = (int)convertDpToPixel(30,New_patient_info.this);
+        img_del.gravity = Gravity.CENTER;
+        img_del.setMarginEnd((int)convertDpToPixel(10,New_patient_info.this));
+        del.setPadding((int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this), (int)convertDpToPixel(5,New_patient_info.this));
+        del.setLayoutParams(img_del);
+
+        final LinearLayout lay = new LinearLayout(New_patient_info.this);
+        LinearLayout.LayoutParams lay_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lay.setLayoutParams(lay_params);
+
+        lay.addView(tp);
+        lay.addView(diagnosis_value);
+        lay.addView(del);
+
+        layout_diagnosis.addView(lay);
+        diagnosis_id.add(id);
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int del_id = del.getId();
+                if(del_id<=diagnosis_key.size())
+                {
+                    int i = diagnosis_id.indexOf(del_id);
+                    edit_patient.child(doc_username).child("patients").child(pat_id).child("patient_diagnosis").child(diagnosis_key.get(i)).removeValue();
+                }
+                diagnosis_editext.remove(diagnosis_value);
+                layout_diagnosis.removeView(lay);
+                diagnosis_id.remove(del_id);
+            }
+        });
+
+        id++;
+
     }
 }

@@ -138,14 +138,16 @@ public class Doctor_profile extends AppCompatActivity
                 }
                 else
                 {
-                    doctor_obj = new Doctor(signup_username, signup_password, email.getText().toString(),
-                            fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification.getText().toString());
-                    doctor_obj.firebase_doctor();
-
                     SharedPreferences sharedPref = getSharedPreferences("doctor_username", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("doctor_username", signup_username);
                     editor.commit();
+
+
+                        doctor_obj = new Doctor(signup_username, signup_password, email.getText().toString(),
+                                fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification.getText().toString());
+                        doctor_obj.firebase_doctor();
+
 
                     launch_my_patients(signup_username);
                 }
@@ -156,29 +158,32 @@ public class Doctor_profile extends AppCompatActivity
         doc_profile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(signup_username).exists())
-                {
-                    doc_username.setText(signup_username);
-                    fullname.setText(dataSnapshot.child(signup_username).child("name").getValue().toString());
-                    email.setText(dataSnapshot.child(signup_username).child("email").getValue().toString());
-                    college.setText(dataSnapshot.child(signup_username).child("college").getValue().toString());
-                    mobile.setText(dataSnapshot.child(signup_username).child("mobile").getValue().toString());
-                    qualification.setText(dataSnapshot.child(signup_username).child("qualification").getValue().toString());
-                    String gender_s = dataSnapshot.child(signup_username).child("gender").getValue().toString();
-                    if(gender_s.equals("Male"))
+
+                    if(dataSnapshot.child(signup_username).exists())
                     {
-                        male.setChecked(true);
-                    }
-                    else if(gender_s.equals("Female"))
-                    {
-                        female.setChecked(true);
-                    }
-                    if(gender_s.equals("Other"))
-                    {
-                        others.setChecked(true);
+                        doc_username.setText(signup_username);
+                        fullname.setText(dataSnapshot.child(signup_username).child("name").getValue().toString());
+                        email.setText(dataSnapshot.child(signup_username).child("email").getValue().toString());
+                        college.setText(dataSnapshot.child(signup_username).child("college").getValue().toString());
+                        mobile.setText(dataSnapshot.child(signup_username).child("mobile").getValue().toString());
+                        qualification.setText(dataSnapshot.child(signup_username).child("qualification").getValue().toString());
+                        String gender_s = dataSnapshot.child(signup_username).child("gender").getValue().toString();
+                        if(gender_s.equals("Male"))
+                        {
+                            male.setChecked(true);
+                        }
+                        else if(gender_s.equals("Female"))
+                        {
+                            female.setChecked(true);
+                        }
+                        if(gender_s.equals("Other"))
+                        {
+                            others.setChecked(true);
+                        }
+
                     }
 
-                }
+
             }
 
             @Override

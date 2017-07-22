@@ -510,46 +510,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
-                <LinearLayout
-                    android:id="@+id/linearLayout_new_type_diagnosis_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2">
-
-                    <ImageButton
-                        android:id="@+id/imageButton_new_type_diagnosis_1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:background="@drawable/type_diagnosis"
-                        android:clickable="false"
-                        android:padding="5dp" />
-
-                    <EditText
-                        android:id="@+id/editText_new_diagnosis_type_1"
-                        android:layout_width="250dp"
-                        android:layout_height="45dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_weight="1.9"
-                        android:hint="Type Diagnosis"
-                        android:singleLine="true"
-                        android:textSize="18dp" />
-
-                    <ImageButton
-                        android:id="@+id/imageButton_new_delete_diagnosis"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/delete_diagnosis"
-                        android:clickable="false"
-                        android:padding="5dp" />
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/linearLayout_new_multiple_diagnosis_view"
                     android:layout_width="match_parent"
