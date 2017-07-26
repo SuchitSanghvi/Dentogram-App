@@ -21,6 +21,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.krish.medical_app.Java_classes.Doctor;
 import com.example.krish.medical_app.R;
 import com.google.firebase.database.DataSnapshot;
@@ -49,12 +55,15 @@ public class Doctor_profile extends AppCompatActivity
     protected String signup_username,signup_email,signup_password,signup;
     protected DatabaseReference doc_profile;
 
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.doctor_profile);
+
+        requestQueue = Volley.newRequestQueue(Doctor_profile.this);
 
         doc_profile = FirebaseDatabase.getInstance().getReference();
 
@@ -144,44 +153,64 @@ public class Doctor_profile extends AppCompatActivity
                     editor.commit();
 
 
-                        doctor_obj = new Doctor(signup_username, signup_password, email.getText().toString(),
-                                fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification.getText().toString());
-                        doctor_obj.firebase_doctor();
 
 
-                    launch_my_patients(signup_username);
+                    doc_profile.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Intent i =new Intent(Doctor_profile.this, My_patients.class);
+                            i.putExtra("username",signup_username);
+                            startActivity(i);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                    doctor_obj = new Doctor(signup_username, signup_password, email.getText().toString(),
+                            fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification.getText().toString());
+                    doctor_obj.firebase_doctor();
                 }
 
             }
         });
 
+        getdata();
+
+    }
+
+    public void getdata(){
         doc_profile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if(dataSnapshot.child(signup_username).exists())
+                if(dataSnapshot.child(signup_username).exists())
+                {
+                    doc_username.setText(signup_username);
+                    fullname.setText(dataSnapshot.child(signup_username).child("name").getValue().toString());
+                    email.setText(dataSnapshot.child(signup_username).child("email").getValue().toString());
+                    college.setText(dataSnapshot.child(signup_username).child("college").getValue().toString());
+                    mobile.setText(dataSnapshot.child(signup_username).child("mobile").getValue().toString());
+                    qualification.setText(dataSnapshot.child(signup_username).child("qualification").getValue().toString());
+                    String gender_s = dataSnapshot.child(signup_username).child("gender").getValue().toString();
+                    if(gender_s.equals("Male"))
                     {
-                        doc_username.setText(signup_username);
-                        fullname.setText(dataSnapshot.child(signup_username).child("name").getValue().toString());
-                        email.setText(dataSnapshot.child(signup_username).child("email").getValue().toString());
-                        college.setText(dataSnapshot.child(signup_username).child("college").getValue().toString());
-                        mobile.setText(dataSnapshot.child(signup_username).child("mobile").getValue().toString());
-                        qualification.setText(dataSnapshot.child(signup_username).child("qualification").getValue().toString());
-                        String gender_s = dataSnapshot.child(signup_username).child("gender").getValue().toString();
-                        if(gender_s.equals("Male"))
-                        {
-                            male.setChecked(true);
-                        }
-                        else if(gender_s.equals("Female"))
-                        {
-                            female.setChecked(true);
-                        }
-                        if(gender_s.equals("Other"))
-                        {
-                            others.setChecked(true);
-                        }
-
+                        male.setChecked(true);
                     }
+                    else if(gender_s.equals("Female"))
+                    {
+                        female.setChecked(true);
+                    }
+                    if(gender_s.equals("Other"))
+                    {
+                        others.setChecked(true);
+                    }
+
+                }
 
 
             }
@@ -191,7 +220,6 @@ public class Doctor_profile extends AppCompatActivity
 
             }
         });
-
 
     }
 
@@ -257,7 +285,21 @@ public class Doctor_profile extends AppCompatActivity
             }
         }
     };
+    public void getdoctordetails(){
+        StringRequest getdata = new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue.add(getdata);
+    }
 
 }
 

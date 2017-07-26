@@ -621,14 +621,15 @@ public class New_patient_info extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View view) {
                 int del_id = del.getId();
-                if(del_id<=diagnosis_key.size())
+                if(del_id<diagnosis_key.size())
                 {
                     int i = diagnosis_id.indexOf(del_id);
                     edit_patient.child(doc_username).child("patients").child(pat_id).child("patient_diagnosis").child(diagnosis_key.get(i)).removeValue();
                 }
                 diagnosis_editext.remove(diagnosis_value);
                 layout_diagnosis.removeView(lay);
-                diagnosis_id.remove(del_id);
+                int d = diagnosis_id.indexOf(del_id);
+                diagnosis_id.remove(d);
             }
         });
 
