@@ -16,4 +16,14 @@
     </string-array>
 
 
+    <string name="qualification_prompt">Choose qualification</string>
+
+    <string-array name="qualification_array">
+        <item>Third Year</item>
+        <item>Fourth Year</item>
+        <item>Intern</item>
+        <item>Doctor</item>
+    </string-array>
+
+
 </resources>

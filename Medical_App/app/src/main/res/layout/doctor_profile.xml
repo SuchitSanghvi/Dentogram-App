@@ -170,15 +170,13 @@
                     android:text="QUALIFICATION"
                     android:textSize="13dp" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/editText_doctor_qualification"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_weight="1.5"
-                    android:hint="Qualification"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true"
-                    android:textSize="18dp" />
+                    android:entries="@array/qualification_array"
+                    android:prompt="@string/qualification_prompt" />
 
             </LinearLayout>
 

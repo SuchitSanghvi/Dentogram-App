@@ -15,10 +15,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -35,16 +38,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static com.example.krish.medical_app.R.id.parent;
+
 /**
  * Created by KRISH on 16-06-2017.
  */
 
-public class Doctor_profile extends AppCompatActivity
+public class Doctor_profile extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
     protected EditText fullname;
     protected EditText email;
     protected EditText mobile;
-    protected EditText qualification;
+    protected Spinner qualification_spinner;
     protected RadioButton male;
     protected RadioButton female;
     protected RadioButton others;
@@ -52,8 +57,9 @@ public class Doctor_profile extends AppCompatActivity
     protected TextView save,doc_username;
     protected EditText college;
     protected Doctor doctor_obj;
-    protected String signup_username,signup_email,signup_password,signup;
+    protected String signup_username,signup_email,signup_password,signup, qualification;
     protected DatabaseReference doc_profile;
+    ArrayAdapter<CharSequence> adapter;
 
     private RequestQueue requestQueue;
 
@@ -78,7 +84,7 @@ public class Doctor_profile extends AppCompatActivity
         fullname = (EditText)findViewById(R.id.editText_doctor_fullname);
         email = (EditText)findViewById(R.id.editText_doctor_email);
         mobile = (EditText)findViewById(R.id.editText_doctor_mobile);
-        qualification = (EditText)findViewById(R.id.editText_doctor_qualification);
+        qualification_spinner = (Spinner)findViewById(R.id.editText_doctor_qualification);
         college = (EditText)findViewById(R.id.editText_doctor_college);
         male = (RadioButton)findViewById(R.id.radio_doctor_male);
         female = (RadioButton)findViewById(R.id.radio_doctor_female);
@@ -89,6 +95,13 @@ public class Doctor_profile extends AppCompatActivity
 
         doc_username.setText(signup_username);
         email.setText(signup_email);
+
+        qualification_spinner.setOnItemSelectedListener(this);
+        adapter = ArrayAdapter.createFromResource(this, R.array.qualification_array, R.layout.support_simple_spinner_dropdown_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        qualification_spinner.setAdapter(adapter);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -130,11 +143,6 @@ public class Doctor_profile extends AppCompatActivity
                     fullname.setHintTextColor(Color.RED);
                     fullname.setHint("Required Full Name");
                 }
-                else if(qualification.getText().toString().equals(""))
-                {
-                    qualification.setHintTextColor(Color.RED);
-                    qualification.setHint("Required Qualification");
-                }
                 else if(college.getText().toString().equals(""))
                 {
                     college.setHintTextColor(Color.RED);
@@ -172,7 +180,7 @@ public class Doctor_profile extends AppCompatActivity
 
 
                     doctor_obj = new Doctor(signup_username, signup_password, email.getText().toString(),
-                            fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification.getText().toString());
+                            fullname.getText().toString(), college.getText().toString(), Gender, mobile.getText().toString(), qualification);
                     doctor_obj.firebase_doctor();
                 }
 
@@ -180,6 +188,18 @@ public class Doctor_profile extends AppCompatActivity
         });
 
         getdata();
+
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+
+        qualification = qualification_spinner.getItemAtPosition(position).toString();
+
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0)
+    {
 
     }
 
@@ -195,7 +215,7 @@ public class Doctor_profile extends AppCompatActivity
                     email.setText(dataSnapshot.child(signup_username).child("email").getValue().toString());
                     college.setText(dataSnapshot.child(signup_username).child("college").getValue().toString());
                     mobile.setText(dataSnapshot.child(signup_username).child("mobile").getValue().toString());
-                    qualification.setText(dataSnapshot.child(signup_username).child("qualification").getValue().toString());
+                    String qualification_s = dataSnapshot.child(signup_username).child("qualification").getValue().toString();
                     String gender_s = dataSnapshot.child(signup_username).child("gender").getValue().toString();
                     if(gender_s.equals("Male"))
                     {
@@ -209,6 +229,18 @@ public class Doctor_profile extends AppCompatActivity
                     {
                         others.setChecked(true);
                     }
+
+                    int pos = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (qualification_spinner.getItemAtPosition(i).equals(qualification_s))
+                        {
+                            pos = i;
+                            break;
+                        }
+                    }
+
+                    qualification_spinner.setSelection(pos);
 
                 }
 
