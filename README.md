@@ -23,8 +23,3 @@
 </p>
 
 This is the [youtube link](https://youtu.be/dzy7IYa75Mw) for the working demo of Dentogram.
-
-
-# License
-
-The Dentogram app is licensed under the terms and conditions of  Apache License Version 2.0 - see the [LICENSE](https://github.com/parinishah/Dentogram/blob/master/LICENSE) file for details.
